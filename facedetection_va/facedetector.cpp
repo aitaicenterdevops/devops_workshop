@@ -12,8 +12,10 @@ using namespace cv;
 int main(int argc, char *argv[])
 {
 	string sFixedPath = "/home/jednipat/works/devops_workshop/facedetection_webapp/public";
-	string sFilePath = string(argv[1]);
+	string sFilePath = string(argv[1]); // Example path: /uploads/fimage64/image/21/image.png
 	string sFullPath = sFixedPath + sFilePath;
+	string sFaceFilePath = sFixedPath + sFilePath.substr(0, sFilePath.find("image.png")) + "face.jpg";
+	std::cout << "sFaceFilePath: " << sFaceFilePath << std::endl;
 
 	CascadeClassifier face_cascade;
 	face_cascade.load( "/home/jednipat/works/devops_workshop/facedetection_va/haarcascade_frontalface_alt.xml" ) ;  
@@ -32,7 +34,7 @@ int main(int argc, char *argv[])
 	{
 		cv::Mat mCroppedFace;
 		mInput(faces.at(i)).copyTo(mCroppedFace);
-		cv::imwrite("tmp.jpg",mCroppedFace);
+		cv::imwrite(sFaceFilePath,mCroppedFace);
 		mCroppedFace.release();
 	}
 
