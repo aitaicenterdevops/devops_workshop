@@ -34,7 +34,7 @@ class Fimage64sController < ApplicationController
       if @fimage64.save
         format.html { redirect_to @fimage64, notice: 'Fimage64 was successfully created.' }
 		puts  @fimage64.image.to_s
-		@exeCommandStr = '/home/jednipat/works/devops_workshop/facedetection_va/facedetector' + " " + @fimage64.image.to_s
+		@exeCommandStr = '/home/jednipat/works/devops_workshop/facedetection_va/facedetector' + " " + @fimage64.image.to_s + " " +@fimage64.id.to_s
 		system(@exeCommandStr)
 
         format.json { render :show, status: :created, location: @fimage64 }

@@ -1,7 +1,7 @@
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
-
+#include "DB.h"
 #include <iostream>
 #include <cstring>
 #include <vector>
@@ -13,9 +13,12 @@ int main(int argc, char *argv[])
 {
 	string sFixedPath = "/home/jednipat/works/devops_workshop/facedetection_webapp/public";
 	string sFilePath = string(argv[1]); // Example path: /uploads/fimage64/image/21/image.png
+	string sFaceId = string(argv[2]);   // The face ID stored in the database
 	string sFullPath = sFixedPath + sFilePath;
 	string sFaceFilePath = sFixedPath + sFilePath.substr(0, sFilePath.find("image.png")) + "face.jpg";
 	std::cout << "sFaceFilePath: " << sFaceFilePath << std::endl;
+
+	DB *pDB = new DB();
 
 	CascadeClassifier face_cascade;
 	face_cascade.load( "/home/jednipat/works/devops_workshop/facedetection_va/haarcascade_frontalface_alt.xml" ) ;  
@@ -35,6 +38,13 @@ int main(int argc, char *argv[])
 		cv::Mat mCroppedFace;
 		mInput(faces.at(i)).copyTo(mCroppedFace);
 		cv::imwrite(sFaceFilePath,mCroppedFace);
+
+		stringstream ssFaceWidth;
+		stringstream ssFaceHeight;
+		ssFaceWidth << mCroppedFace.cols;
+		ssFaceHeight << mCroppedFace.rows;
+		pDB->updateFaceInfo(sFaceId, "true", ssFaceWidth.str() , ssFaceHeight.str());
+
 		mCroppedFace.release();
 	}
 
