@@ -11,7 +11,7 @@ find_package(Boost 1.70 REQUIRED COMPONENTS filesystem thread)
 add_executable(facedetector ${CMAKE_CURRENT_SOURCE_DIR}/facedetector.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/DB.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/json/jsoncpp.cpp
-)
+        FaceDetectionService.cpp FaceDetectionService.h)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
