@@ -57,3 +57,21 @@ RUN ldconfig
 
 RUN apt-get install -y libssl-dev
 
+RUN apt-get install -y openssh-server
+COPY ssh_key_dev.pub /root/.ssh/authorized_keys
+
+RUN groupadd -g 1000 dev
+RUN useradd -r -u 1000 -g dev dev
+RUN mkdir /home/dev && chown -R dev.dev /home/dev
+
+# set the locale to en_US.UTF-8
+RUN apt-get install -y locales
+ENV DEBIAN_FRONTEND noninteractive
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+    && locale-gen en_US.UTF-8 \
+    && dpkg-reconfigure locales \
+    && /usr/sbin/update-locale LANG=en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+RUN apt-get install -y gdb
+
