@@ -1,1 +1,59 @@
-FROM jjanzic/docker-python3-opencv
+FROM debian
+
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y libmysqlcppconn-dev cmake build-essential \
+                       libswscale-dev libavresample-dev libtbb2 libtbb-dev \
+                       libjpeg-dev libpng-dev libtiff-dev libavformat-dev \
+                       libpq-dev git wget unzip yasm pkg-config \
+                       python-pip python3 python3-pip
+
+RUN pip install numpy
+RUN pip3 install numpy
+
+ENV OPENCV_VERSION="3.4.6"
+ENV PYTHON2_EXECUTABLE="/usr/bin/python2.7"
+
+RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
+    && unzip ${OPENCV_VERSION}.zip
+
+RUN mkdir /opencv-${OPENCV_VERSION}/cmake_binary \
+    && cd /opencv-${OPENCV_VERSION}/cmake_binary \
+    && cmake -DBUILD_TIFF=ON \
+      -DBUILD_opencv_java=OFF \
+      -DWITH_CUDA=OFF \
+      -DENABLE_AVX=ON \
+      -DWITH_OPENGL=ON \
+      -DWITH_OPENCL=ON \
+      -DWITH_IPP=ON \
+      -DWITH_TBB=ON \
+      -DWITH_EIGEN=ON \
+      -DWITH_V4L=ON \
+      -DBUILD_TESTS=OFF \
+      -DBUILD_PERF_TESTS=OFF \
+      -DCMAKE_BUILD_TYPE=RELEASE \
+      -DCMAKE_INSTALL_PREFIX=$(python3.5 -c "import sys; print(sys.prefix)") \
+      -DPYTHON_EXECUTABLE=$(which python3.5) \
+      -DPYTHON_INCLUDE_DIR=$(python3.5 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") \
+      -DPYTHON_PACKAGES_PATH=$(python3.5 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") ..
+
+RUN cd /opencv-${OPENCV_VERSION}/cmake_binary \
+    && make install
+
+RUN rm /${OPENCV_VERSION}.zip \
+    && rm -r /opencv-${OPENCV_VERSION} \
+    && ldconfig
+
+# install boost with -fPIC
+RUN wget https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.gz
+RUN tar xvzf boost_1_70_0.tar.gz
+WORKDIR boost_1_70_0/
+RUN ./bootstrap.sh --prefix=/usr/local
+RUN ./b2 -j $(nproc) cxxflags=-fPIC install; exit 0
+WORKDIR /
+RUN rm -rf /boost_1_70_0**
+RUN echo "/usr/local/lib" >> /etc/ld.so.conf.d/local.conf
+RUN ldconfig
+
+RUN apt-get install -y libssl-dev
+
