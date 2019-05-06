@@ -24,6 +24,10 @@ fi
 
 # Build
 
-make clean
-make VERBOSE=1
+make
+
+# Run
+
+echo "Running detection service..."
+./facedetector server
 
