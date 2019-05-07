@@ -6,6 +6,9 @@
 #include <webcc/logger.h>
 #include <webcc/rest_server.h>
 #include <json/json.h>
+#include <base64/base64.h>
+#include <opencv2/imgcodecs.hpp>
+#include <cv.hpp>
 
 #include "FaceDetectionService.h"
 
@@ -31,10 +34,25 @@ Json::Value StringToJson(const string &s)
     return json;
 }
 
+std::string base64_encode(unsigned char const* , unsigned int len);
+std::string base64_decode(std::string const& s);
+
+
+void Image::setImageData(string sImageDataBase64)
+{
+    string sImageData = base64_decode(sImageDataBase64);
+    vector<uint8_t> vImageData(sImageData.begin(), sImageData.end());
+    _matInput = imdecode(vImageData, IMREAD_GRAYSCALE);
+}
+
 
 Image *JsonToImage(const Json::Value &json)
 {
     Image *pImage = new Image(json["faceId"].asString());
+    if (!json["imageData"].isNull())
+    {
+        pImage->setImageData(json["imageData"].asString());
+    }
     return pImage;
 }
 
@@ -58,27 +76,55 @@ string JsonToString(const Json::Value &json)
 }
 
 
+void Image::faceDetect(CascadeClassifier &cascade, vector<Rect> &vFaces)
+{
+    if (_matInput.empty())
+    {
+        LOG_ERRO("Input image is empty!");
+        return;
+    }
+    equalizeHist(_matInput, _matInput);
+    cascade.detectMultiScale(_matInput, vFaces, 1.1, 2, CV_HAAR_SCALE_IMAGE, Size(30, 30));
+    LOG_ERRO("Finished detection..");
+}
+
+
 void FaceDetectionService::Post(const string &sRequestContent,
                                 webcc::RestResponse* response)
 {
     if (sRequestContent == "")
     {
         LOG_ERRO("Got empty request.");
+        return;
     }
-    Sleep(sleep_seconds_);
-    Image *pImage = NULL;
+    Sleep(_iSleepSeconds_);
+    Image *pImage = nullptr;
     if (JsonStringToImage(sRequestContent, pImage))
     {
-        // Execute workflow here
-        string id = "new";
-
         Json::Value json;
-        json["id"] = id;
+
+        json["faceId"] = pImage->getFaceId();
+        json["faces"] = Json::Value(Json::arrayValue);
+
+        vector<Rect> vFaces;
+        pImage->faceDetect(_cascade, vFaces);
+
+        for (int i=0; i < vFaces.size(); i++)
+        {
+            Json::Value jsonFace;
+            jsonFace["width"] = vFaces[i].width;
+            jsonFace["height"] = vFaces[i].height;
+            jsonFace["x"] = vFaces[i].x;
+            jsonFace["y"] = vFaces[i].y;
+            json["faces"].append(jsonFace);
+        }
 
         response->content = JsonToString(json);
         response->media_type = webcc::media_types::kApplicationJson;
         response->charset = "utf-8";
         response->status = webcc::Status::kCreated;
+
+        delete pImage;
     } else {
         // Invalid JSON
         response->status = webcc::Status::kBadRequest;
@@ -90,7 +136,7 @@ void FaceDetectionService::Post(const string &sRequestContent,
 
 void FaceDetectionService::Get(const webcc::UrlQuery& query, webcc::RestResponse* response)
 {
-    Sleep(sleep_seconds_);
+    Sleep(_iSleepSeconds_);
     Json::Value json(Json::arrayValue);
     response->content = JsonToString(json);
     response->media_type = webcc::media_types::kApplicationJson;

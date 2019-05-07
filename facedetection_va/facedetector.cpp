@@ -27,9 +27,17 @@ int main(int argc, char *argv[])
         size_t workers = 2;
         int sleep_seconds = 0;
 
+        CascadeClassifier face_cascade;
+        face_cascade.load("haarcascade_frontalface_alt.xml");
+        if (face_cascade.empty())
+        {
+            LOG_ERRO("Cascade is empty!");
+            return 1;
+        }
+
         try {
             webcc::RestServer server(port, workers);
-            server.Bind(std::make_shared<FaceDetectionService>(sleep_seconds), "/images", false);
+            server.Bind(std::make_shared<FaceDetectionService>(sleep_seconds, face_cascade), "/images", false);
             server.Run();
         }
         catch (const std::exception& e)

@@ -9,9 +9,11 @@ find_package(OpenCV 3.4.3 REQUIRED)
 find_package(Boost 1.70 REQUIRED COMPONENTS filesystem thread)
 
 add_executable(facedetector ${CMAKE_CURRENT_SOURCE_DIR}/facedetector.cpp
+                            ${CMAKE_CURRENT_SOURCE_DIR}/FaceDetectionService.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/DB.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/json/jsoncpp.cpp
-        FaceDetectionService.cpp FaceDetectionService.h)
+                            ${CMAKE_CURRENT_SOURCE_DIR}/base64/base64.cpp
+)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
