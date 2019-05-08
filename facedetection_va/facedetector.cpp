@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         int sleep_seconds = 0;
 
         CascadeClassifier face_cascade;
-        face_cascade.load("haarcascade_frontalface_alt.xml");
+        face_cascade.load("/home/dev/devops_workshop/facedetection_va/haarcascade_frontalface_alt.xml");
         if (face_cascade.empty())
         {
             LOG_ERRO("Cascade is empty!");
