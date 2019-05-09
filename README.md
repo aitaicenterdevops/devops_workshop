@@ -296,3 +296,8 @@ If you have any trouble with this part of the tutorial,
 check the <tt>02-pipeline</tt> branch of the original repository and you'll
 see our setup.
 
+## The test stage
+
+Now that we have a basic build stage in place, let's get the test
+stage doing something useful for us.
+
