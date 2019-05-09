@@ -283,8 +283,16 @@ So! Change the dummy build stage contents to the following:
       sh '''
         ./scripts/build.sh
         mkdir -p dist
-        cp facedetect_va/cmake-build-release/facedetector dist/
+        cp facedetection_va/cmake-build-release/facedetector dist/
       '''
       archiveArtifacts artifacts: 'dist/*', fingerprint: true
     }
+
+Once your build is successful, check the branch build page
+(<a href=http://localhost:8080/job/devops_workshop/job/before-test>http://localhost:8080/job/devops_workshop/job/before-test></a>)
+and verify that the artifacts are successfully published and downloadable.
+
+If you have any trouble with this part of the tutorial,
+check the <tt>02-pipeline</tt> branch of the original repository and you'll
+see our setup.
 
