@@ -21,7 +21,6 @@ pipeline {
         dockerfile {
           label "${nodeLabel}"
           filename 'dev/Dockerfile.dev'
-          dir 'dev'
         }
       }
       steps {
