@@ -255,4 +255,36 @@ the console log to see what went wrong.
 OK, now that we have a basic pipeline running without doing much,
 let's fully implement the "build" stage of our pipeline.
 
+Generally, we want to keep as much application-specific logic out
+of the Jenkins pipeline and do everything we can with scripts
+that are called from the pipeline.
+
+In the current case, we want to run the build script (which is already
+in the <tt>scripts/</tt> directory) then <i>archive the artifacts</i>
+(executables, libraries, etc.)
+that will be used in the rest of the pipeline.
+
+One important CI/CD principle is that we only build artifacts once then
+use those artifacts in the later stages of the pipeline.
+
+Now this may not always be possible; for example, when we do unit testing
+we normally use a separate test framework that should not be included in
+the production/release version.
+
+However, that said, we'll build release/production binaries now then
+use them rather than rebuild then where appropriate later.
+
+So! Change the dummy build stage contents to the following:
+
+    steps {
+      /* These steps are going to run inside the dev environment
+         container, with the git repo workspace mounted as a bind
+         volume. */
+      sh '''
+        ./scripts/build.sh
+        mkdir -p dist
+        cp facedetect_va/cmake-build-release/facedetector dist/
+      '''
+      archiveArtifacts artifacts: 'dist/*', fingerprint: true
+    }
 

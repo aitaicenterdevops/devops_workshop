@@ -30,7 +30,10 @@ pipeline {
            volume. */
         sh '''
           ./scripts/build.sh
+          mkdir -p dist
+          cp facedetect_va/cmake-build-release/facedetector dist/
         '''
+        archiveArtifacts artifacts: 'dist/*', fingerprint: true
       }
     }
 
