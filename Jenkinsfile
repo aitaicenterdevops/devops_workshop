@@ -29,7 +29,7 @@ pipeline {
            container, with the git repo workspace mounted as a bind
            volume. */
         sh '''
-          echo "Hello from the build step!"
+          ./scripts/build.sh
         '''
       }
     }

@@ -250,3 +250,9 @@ Docker is
 set up properly, you should get a successful build. If not, look at
 the console log to see what went wrong.
 
+## The build stage
+
+OK, now that we have a basic pipeline running without doing much,
+let's fully implement the "build" stage of our pipeline.
+
+
