@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @image.name %>
+</p>
+
+<p>
+  <strong>Original image:</strong>
+  <%= image_tag(@image.original_image) %>
+</p>
+
+<p>
+  <strong>Face image:</strong>
+  <% if @image.face_image.attached? %>
+  <%= image_tag(@image.face_image) %>
+    <% end %>
+</p>
+
+
+<p>
+  <strong>Width:</strong>
+  <%= @image.width %>
+</p>
+
+<p>
+  <strong>Height:</strong>
+  <%= @image.height %>
+</p>
+
+<p>
+  <strong>X position:</strong>
+  <%= @image.x_position %>
+</p>
+
+<p>
+  <strong>Y position:</strong>
+  <%= @image.y_position %>
+</p>
+
+<%= link_to 'Edit', edit_image_path(@image) %> |
+<%= link_to 'Back', images_path %>
