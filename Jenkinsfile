@@ -20,7 +20,8 @@ pipeline {
       agent {
         dockerfile {
           label "${nodeLabel}"
-          filename 'dev/Dockerfile.dev'
+          filename 'Dockerfile.dev'
+          dir 'dev'
         }
       }
       steps {

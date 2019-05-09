@@ -75,13 +75,15 @@ Jenkins is one of the well-known ones.  In real life, of course, you'd want
 to run it in your data center, on a cloud server, or maybe you'd use the
 Jenkins SaaS from CloudBees.  In this tutorial, we'll play with
 Jenkins on the local host under Docker.  Let's pull a Docker image for
-Jenkins:
+Jenkins, then modify it for the purposes of today's tutorial.
 
-    $ docker pull jenkins/jenkins:lts
+    $ docker build -f dev/Dockerfile.jenkins dev/ -t jenkins-with-docker
     $ docker run -p 8080:8080 -p 50000:50000 \
                  -v jenkins_home:/var/jenkins_home \
+                 -v  /var/run/docker.sock:/var/run/docker.sock \
                  -v /path/to/workdir/devops_workshop:/devops_workshop:ro \
-                 jenkins/jenkins:lts
+                 --privileged \
+                 jenkins-with-docker
 
 The first volume option (<tt>-v</tt>) enables our local
 Jenkins to save its state persistently rather than starting fresh from
