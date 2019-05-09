@@ -70,6 +70,8 @@ unit/integration/acceptance testing.
 The first thing we should do is to get the project into a repeatable
 pipeline that will trigger on each build.
 
+### Get Jenkins up and running
+
 As discussed in class, there are many tools for building CI/CD pipelines.
 Jenkins is one of the well-known ones.  In real life, of course, you'd want
 to run it in your data center, on a cloud server, or maybe you'd use the
@@ -111,15 +113,52 @@ OK, copy the initial setup password then visit
 Use the given password, click on "Install suggested plugins" and wait
 for the plugins to install. It'll probably take a few minutes.
 
+### Hack to allow Jenkins to run Docker-in-Docker!
+
+This is a bit of a hack and only necessary because Jenkins is running
+in a Docker container AND we want Jenkins itself to run Docker to
+create our build/test/deploy environments.
+
+First, make sure that on the host, the user with ID 1000 is able to
+run Docker commands.  To find out which user has user ID 1000,
+take a look at <tt>/etc/passwd</tt>.  If that user can run <tt>docker ps</tt>
+and so on, all is well. If not, you may need to add that user to the
+Docker group with a line in /etc/group such as
+
+    docker:x:135:user1,user2,user3
+
+where one of the users listed is user 1000.
+
+Next, once you've started the Jenkins container with the
+<tt>docker run</tt> command above, you need to make sure that the Jenkins
+user inside the Jenkins container also has access to Docker, WITHIN THE
+DOCKER CONTAINER!! To do this, do a
+
+    $ docker ps
+
+to find out your Jenkins container ID, then run
+
+    host$ docker run -it containerId bash
+    cont$ su         # Password is 12345 you might want to change it!
+    cont# chown root.docker /var/run/docker.sock
+    cont# exit
+    cont$ docker ps  # Should work OK
+
+If anyone has a foolproof method to set up an Jenkins-with-Docker image
+that avoids this step, please let us know!
+
+### First pipeline
+
+Jenkins is problably still downloading plugins.
 While that's going on, let's create our first build pipeline.
 
 Create a file <tt>Jenkinsfile</tt> at the top level of the repository
 and put the following contents in it:
 
-    /* Change 'any' to the Jenkins slave you would like the
+    /* Change 'master' to the Jenkins slave you would like the
        steps of this pipeline to run on, if you have a preference. */
 
-    def nodeLabel = 'any'
+    def nodeLabel = 'master'
 
     /* The main pipeline. We'll have a build stage, a test stage, and
        a deploy stage. */
@@ -137,7 +176,7 @@ and put the following contents in it:
           agent {
             dockerfile {
               label "${nodeLabel}"
-              filename 'dev/Dockerfile.dev'
+              filename 'Dockerfile.dev'
               dir 'dev'
             }
           }
@@ -163,7 +202,7 @@ and put the following contents in it:
             '''
           }
         }
-    
+
         stage('deploy') {
           /* We don't have a deploy environment yet so we'll run within
              Jenkins' environment for now. */
@@ -195,4 +234,12 @@ Since you already gave your Jenkins container access to your local
 repository, you should be able to 
 enter <tt>file:///devops\_workshop</tt> for the repository URL.
 
-There's a slightly more complete example in the
+You may want to initially specify that Jenkins should only build the
+<tt>before-test</tt> branch rather than scan for all branches with a
+Jenkinsfile.
+
+Finally, Jenkins should scan for your repo and start building. If
+Docker is
+set up properly, you should get a successful build. If not, look at
+the console log to see what went wrong.
+
