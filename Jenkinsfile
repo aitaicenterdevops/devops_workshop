@@ -1,8 +1,8 @@
 
-/* Change 'any' to the Jenkins slave you would like the
+/* Change 'master' to the Jenkins slave you would like the
    steps of this pipeline to run on, if you have a preference. */
 
-def nodeLabel = 'any'
+def nodeLabel = 'master'
 
 /* The main pipeline. We'll have a build stage, a test stage, and
    a deploy stage. */
