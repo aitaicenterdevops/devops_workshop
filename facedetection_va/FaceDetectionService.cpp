@@ -34,9 +34,6 @@ Json::Value StringToJson(const string &s)
     return json;
 }
 
-std::string base64_encode(unsigned char const* , unsigned int len);
-std::string base64_decode(std::string const& s);
-
 
 void Image::setImageData(string sImageDataBase64)
 {
@@ -85,7 +82,6 @@ void Image::faceDetect(CascadeClassifier &cascade, vector<Rect> &vFaces)
     }
     equalizeHist(_matInput, _matInput);
     cascade.detectMultiScale(_matInput, vFaces, 1.1, 2, CV_HAAR_SCALE_IMAGE, Size(30, 30));
-    LOG_ERRO("Finished detection..");
 }
 
 
