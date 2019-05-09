@@ -100,7 +100,14 @@ to get the container's ID then
 
 to run a shell in the container and poke around.
 
-The second volume option is a "bind" mount of your local copy of of the
+The second volume option links the Docker daemon's socket inside
+the container to the one on your host. This combined with the
+<tt>--priviledged</tt> option should enable your Jenkins instance
+to talk to your Docker daemon. However, you'll have to make a small fix
+as described below to complete the connection.
+
+Anyway,
+the third volume option mounts your local copy of of the
 git repository to the path <tt>/devops\_workshop</tt> inside Jenkins'
 Docker environment. In a bit, we'll have Jenkins monitor your repository
 via this bind mount. The directory is mounted read only for safety.
