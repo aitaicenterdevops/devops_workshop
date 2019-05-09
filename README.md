@@ -14,7 +14,7 @@ You could imagine a Web-scale system like Facebook using such a service to searc
 
 ## Get started
 
-First clone the repository and switch to the <pre>before-test</pre>
+First clone the repository and switch to the <tt>before-test</tt>
 branch:
 
     $ git clone https://github.com/aitaicenterdevops/devops_workshop
@@ -41,7 +41,7 @@ This should build the Docker image, start a Docker container with the image,
 build our software in the container, and start the face detection service.
 
 The service is a very simple REST service that accepts HTTP POST requests
-to <pre>/images</pre>.
+to <tt>/images</tt>.
 
 The POST data should be JSON-formatted like so:
 
@@ -50,10 +50,10 @@ The POST data should be JSON-formatted like so:
         "imageData": "/9j/..."
     }
 
-The <pre>imageData</pre> element should be a JPEG encoding of an image, in turn encoded to a text string with base64.
+The <tt>imageData</tt> element should be a JPEG encoding of an image, in turn encoded to a text string with base64.
 
-There is a sample image <pre>test.jpg</pre> and a sample JSON file <pre>smoketest.json</pre> in the
-<pre>scripts/</pre> directory.
+There is a sample image <tt>test.jpg</tt> and a sample JSON file <tt>smoketest.json</tt> in the
+<tt>scripts/</tt> directory.
 
 To smoke test your service after it's up and running, you should be able to run the script
 
