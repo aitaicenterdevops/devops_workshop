@@ -145,7 +145,7 @@ DOCKER CONTAINER!! To do this, do a
 
 to find out your Jenkins container ID, then run
 
-    host$ docker run -it containerId bash
+    host$ docker exec -it containerId bash
     cont$ su         # Password is 12345 you might want to change it!
     cont# chown root.docker /var/run/docker.sock
     cont# exit
@@ -308,7 +308,7 @@ tests:
     host$ git checkout 03-test
     host$ docker ps
     host$ # find the CONTAINER ID for the dev environment. Suppose it's containerId.
-    host$ docker run -it containerId bash
+    host$ docker exec -it containerId bash
     cont# cd /home/dev/devops_workshop
     cont# ./scripts/test.sh
 
