@@ -1,4 +1,4 @@
-FROM debian
+FROM ruby:2.6.3
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -6,7 +6,13 @@ RUN apt-get install -y libmysqlcppconn-dev cmake build-essential \
                        libswscale-dev libavresample-dev libtbb2 libtbb-dev \
                        libjpeg-dev libpng-dev libtiff-dev libavformat-dev \
                        libpq-dev git wget unzip yasm pkg-config \
-                       python-pip python3 python3-pip
+                       python-pip python3 python3-pip googletest \
+                       imagemagick build-essential mysql-client nodejs \
+                       autoconf bison libssl-dev libyaml-dev \
+                       libreadline6-dev zlib1g-dev libncurses5-dev \
+                       libffi-dev libgdbm3 libgdbm-dev libcurl4-openssl-dev \
+                       imagemagick ffmpeg git vim yarn gdb locales \
+                       libssl-dev openssh-server
 
 RUN pip install numpy
 RUN pip3 install numpy
@@ -55,9 +61,6 @@ RUN rm -rf /boost_1_70_0**
 RUN echo "/usr/local/lib" >> /etc/ld.so.conf.d/local.conf
 RUN ldconfig
 
-RUN apt-get install -y libssl-dev
-
-RUN apt-get install -y openssh-server
 COPY ssh_key_dev.pub /root/.ssh/authorized_keys
 
 RUN groupadd -g 1000 dev
@@ -65,13 +68,10 @@ RUN useradd -r -u 1000 -g dev dev
 RUN mkdir /home/dev && chown -R dev.dev /home/dev
 
 # set the locale to en_US.UTF-8
-RUN apt-get install -y locales
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
     && locale-gen en_US.UTF-8 \
     && dpkg-reconfigure locales \
     && /usr/sbin/update-locale LANG=en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
-
-RUN apt-get install -y gdb
 
