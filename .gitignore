@@ -5,3 +5,4 @@ cmake-build-debug
 *.a
 *.log
 .sprockets-manifest-*.json
+tmp/cache/assets
