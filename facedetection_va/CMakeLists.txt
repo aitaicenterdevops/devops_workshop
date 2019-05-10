@@ -15,7 +15,7 @@ add_executable(facedetector ${CMAKE_CURRENT_SOURCE_DIR}/facedetector.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/base64/base64.cpp
 )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest)
 
 target_include_directories(facedetector PUBLIC ${OpenCV_INCLUDE_DIRS})
 
@@ -25,3 +25,4 @@ add_subdirectory(webcc)
 
 add_subdirectory(test)
 
+add_subdirectory(googletest)

@@ -1,6 +1,4 @@
 
-set(GTEST_SRC_DIR /usr/src/googletest/googletest/src)
-
 set(SRC_DIR ${CMAKE_SOURCE_DIR})
 set(TESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -17,22 +15,11 @@ set_target_properties(
 
 set_target_properties(fd_unittest PROPERTIES LINK_FLAGS "--coverage")
 
-find_library(GTEST_MAIN_LIB gtest_main ${CMAKE_SOURCE_DIR}/../test)
-find_library(GTEST_LIB gtest ${CMAKE_SOURCE_DIR}/../test)
-find_library(GMOCK_LIB gmock ${CMAKE_SOURCE_DIR}/../test)
-find_library(GMOCK_MAIN_LIB gmock_main ${CMAKE_SOURCE_DIR}/../test)
-
-target_link_libraries(fd_unittest ${GTEST_MAIN_LIB}
-                                  ${GTEST_LIB}
-                                  ${GMOCK_MAIN_LIB}
-                                  ${GMOCK_LIB}
+target_link_libraries(fd_unittest gtest gmock gtest_main gmock_main
                                   ${OpenCV_LIBS}
                                   webcc
-                                  Boost::thread
-                                  Boost::filesystem
-#target_link_libraries (facedetector ${OpenCV_LIBS} mysqlcppconn webcc Boost::filesystem Boost::thread)
+                                  Boost::thread Boost::filesystem
 )
 
 target_include_directories(fd_unittest PUBLIC ${OpenCV_INCLUDE_DIRS}
                                        PRIVATE ${CMAKE_SOURCE_DIR})
-
