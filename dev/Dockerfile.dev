@@ -12,7 +12,8 @@ RUN apt-get install -y libmysqlcppconn-dev cmake build-essential \
                        libreadline6-dev zlib1g-dev libncurses5-dev \
                        libffi-dev libgdbm3 libgdbm-dev libcurl4-openssl-dev \
                        imagemagick ffmpeg git vim yarn gdb locales \
-                       libssl-dev openssh-server
+                       libssl-dev openssh-server mysql-server
+
 
 RUN pip install numpy
 RUN pip3 install numpy
