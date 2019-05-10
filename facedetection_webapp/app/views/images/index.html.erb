@@ -5,6 +5,7 @@
 <table>
   <thead>
     <tr>
+      <th>Face image</th>
       <th>Name</th>
       <th>Width</th>
       <th>Height</th>
@@ -17,13 +18,13 @@
   <tbody>
     <% @images.each do |image| %>
       <tr>
+        <td><%= image_tag image.face_image %></td>
         <td><%= image.name %></td>
         <td><%= image.width %></td>
         <td><%= image.height %></td>
         <td><%= image.x_position %></td>
         <td><%= image.y_position %></td>
         <td><%= link_to 'Show', image %></td>
-        <td><%= link_to 'Edit', edit_image_path(image) %></td>
         <td><%= link_to 'Destroy', image, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
