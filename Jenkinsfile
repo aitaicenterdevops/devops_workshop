@@ -32,6 +32,7 @@ pipeline {
           ./scripts/build.sh
           mkdir -p dist
           cp facedetection_va/cmake-build-release/facedetector dist/
+          cp facedetection_va/cmake-build-release/test/fd_unittest dist/
         '''
         archiveArtifacts artifacts: 'dist/*', fingerprint: true
       }
@@ -50,7 +51,7 @@ pipeline {
       }
       steps {
         sh '''
-          ./scripts/test.sh
+          ./scripts/test-ci.sh
         '''
       }
     }
