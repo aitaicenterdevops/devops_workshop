@@ -1,0 +1,23 @@
+FROM ruby:2.6.3
+
+MAINTAINER devops_workshop
+
+RUN gem install bundler && gem install rails
+
+RUN apt update && apt install -y imagemagick build-essential mysql-client nodejs autoconf \
+    bison libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
+    libgdbm3 libgdbm-dev libcurl4-openssl-dev imagemagick ffmpeg git vim yarn
+
+RUN mkdir facedetection_webapp/
+
+WORKDIR facedetection_webapp/
+
+COPY facedetection_webapp/Gemfile* ./
+
+RUN bundle install --force
+
+ADD facedetection_webapp/ .
+
+RUN bundle install
+
+RUN bundle exec rake assets:precompile RAILS_ENV=production
