@@ -13,29 +13,32 @@
 
   <div class="field">
     <%= form.label :name %>
-    <%= form.text_field :name , :require => true%>
+    <%= form.text_field :name %>
   </div>
 
   <input id="snap_image" type="hidden" name="base64img">
 
+
+  <!-- Stream video via webcam -->
+  <div class="video-wrap">
+    <video id="video" playsinline autoplay></video>
+  </div>
+
+  <!-- Trigger canvas web API -->
+  <div class="controller">
+    <button id="snap" type="button">Capture</button>
+  </div>
+
+  <!-- Webcam video snapshot -->
+  <canvas id="canvas" width="640" height="480"></canvas>
+
+
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Detect face" %>
   </div>
 <% end %>
 
 
-<!-- Stream video via webcam -->
-<div class="video-wrap">
-  <video id="video" playsinline autoplay></video>
-</div>
-
-<!-- Trigger canvas web API -->
-<div class="controller">
-  <button id="snap">Capture</button>
-</div>
-
-<!-- Webcam video snapshot -->
-<canvas id="canvas" width="640" height="480"></canvas>
 
 <script>
     'use strict';

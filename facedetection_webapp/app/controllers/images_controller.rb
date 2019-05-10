@@ -17,26 +17,18 @@ class ImagesController < ApplicationController
     @image = Image.new
   end
 
-  # GET /images/1/edit
-  def edit
-  end
-
-  # POST /images
-  # POST /images.json
   def create
-    # require 'net/http'
-    # require 'json'
-    # require 'uri'
-    # require 'mini_magick'
 
     @image = Image.new(image_params)
 
     respond_to do |format|
       if @image.save
 
-        face_detection(params[:base64img])
+        unless params[:base64img].blank?
+          face_detection(params[:base64img])
+        end
 
-        format.html { redirect_to @image, notice: 'Image was successfully created.' }
+        format.html { redirect_to @image, notice: 'Face detection completed.' }
         format.json { render :show, status: :created, location: @image }
       else
         format.html { render :new }
@@ -45,21 +37,6 @@ class ImagesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /images/1
-  # PATCH/PUT /images/1.json
-  def update
-    respond_to do |format|
-      if @image.update(image_params)
-
-
-        format.html { redirect_to @image, notice: 'Image was successfully updated.' }
-        format.json { render :show, status: :ok, location: @image }
-      else
-        format.html { render :edit }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   # DELETE /images/1
   # DELETE /images/1.json
@@ -138,6 +115,8 @@ class ImagesController < ApplicationController
       else
         puts "no faces information"
       end
+
+
     end
 
 end

@@ -14,31 +14,18 @@ class ImagesTest < ApplicationSystemTestCase
     visit images_url
     click_on "New Image"
 
-    fill_in "Height", with: @image.height
+#    fill_in "Height", with: @image.height
     fill_in "Name", with: @image.name
-    fill_in "Width", with: @image.width
-    fill_in "X position", with: @image.x_position
-    fill_in "Y position", with: @image.y_position
+#    fill_in "Width", with: @image.width
+#    fill_in "X position", with: @image.x_position
+#    fill_in "Y position", with: @image.y_position
+    click_on "Capture"
     click_on "Create Image"
 
     assert_text "Image was successfully created"
     click_on "Back"
   end
 
-  test "updating a Image" do
-    visit images_url
-    click_on "Edit", match: :first
-
-    fill_in "Height", with: @image.height
-    fill_in "Name", with: @image.name
-    fill_in "Width", with: @image.width
-    fill_in "X position", with: @image.x_position
-    fill_in "Y position", with: @image.y_position
-    click_on "Update Image"
-
-    assert_text "Image was successfully updated"
-    click_on "Back"
-  end
 
   test "destroying a Image" do
     visit images_url
