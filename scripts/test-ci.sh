@@ -6,7 +6,7 @@ PROJECT_DIR=${PWD}
 
 echo "Running face detection service tests..."
 
-cd $PROJECT_DIR/cmake-build-debug
+cd $PROJECT_DIR/facedetection_va/cmake-build-release
 ./test/fd_unittest
 rm -rf code-coverage-info code-coverage-report
 lcov --directory ./test --capture --output-file ./code-coverage.info -rc lcov_branch_coverage=1
