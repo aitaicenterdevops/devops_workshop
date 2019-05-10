@@ -3,3 +3,5 @@ cmake-build-debug-remote
 cmake-build-debug
 .idea
 *.a
+*.log
+.sprockets-manifest-*.json

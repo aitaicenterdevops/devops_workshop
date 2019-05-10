@@ -6,6 +6,8 @@ set(TESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(fd_unittest ${SRC_DIR}/FaceDetectionService.cpp
                            ${TESTS_DIR}/TestFaceDetectionService.cpp
+                           ${SRC_DIR}/json/jsoncpp.cpp
+                           ${SRC_DIR}/base64/base64.cpp
 )
 
 set_target_properties(
@@ -24,4 +26,13 @@ target_link_libraries(fd_unittest ${GTEST_MAIN_LIB}
                                   ${GTEST_LIB}
                                   ${GMOCK_MAIN_LIB}
                                   ${GMOCK_LIB}
+                                  ${OpenCV_LIBS}
+                                  webcc
+                                  Boost::thread
+                                  Boost::filesystem
+#target_link_libraries (facedetector ${OpenCV_LIBS} mysqlcppconn webcc Boost::filesystem Boost::thread)
 )
+
+target_include_directories(fd_unittest PUBLIC ${OpenCV_INCLUDE_DIRS}
+                                       PRIVATE ${CMAKE_SOURCE_DIR})
+
