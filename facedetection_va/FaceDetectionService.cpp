@@ -105,7 +105,7 @@ void FaceDetectionService::Post(const string &sRequestContent,
         vector<Rect> vFaces;
         pImage->faceDetect(_cascade, vFaces);
 
-        for (int i=0; i < vFaces.size(); i++)
+        for (int i=0; i < (int)vFaces.size(); i++)
         {
             Json::Value jsonFace;
             jsonFace["width"] = vFaces[i].width;
