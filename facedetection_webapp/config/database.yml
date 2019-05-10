@@ -10,6 +10,7 @@ default: &default
   timeout: 5000
   username: root
   password: root
+  host: web-database  #add this when using docker-compose. Docker-compose will automatically link webapp to db container
 
 development:
   <<: *default

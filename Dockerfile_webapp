@@ -8,9 +8,9 @@ RUN apt update && apt install -y imagemagick build-essential mysql-client nodejs
     bison libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
     libgdbm3 libgdbm-dev libcurl4-openssl-dev imagemagick ffmpeg git vim yarn
 
-RUN mkdir facedetection_webapp/
+RUN mkdir -p /home/dev/devops_workshop/facedetection_webapp/
 
-WORKDIR facedetection_webapp/
+WORKDIR /home/dev/devops_workshop/facedetection_webapp/
 
 COPY facedetection_webapp/Gemfile* ./
 

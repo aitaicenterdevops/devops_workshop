@@ -36,56 +36,6 @@ class ImagesController < ApplicationController
 
         face_detection(params[:base64img])
 
-        # base64img = params[:base64img].split('base64,')[1]
-        # @image.original_image.attach(data: params[:base64img], filename: 'original.png', content_type: 'image/png')
-        #
-        # url = URI.parse(ENV["FACE_DETECTOR_URL"].to_s)
-        # http = Net::HTTP.new(url.host,url.port)
-        # data = {faceId: @image.id , imageData: base64img}
-        # request = Net::HTTP::Post.new(url.request_uri,{'Content-Type' => 'application/json'})
-        # request.body = data.to_json
-        # response = http.request(request)
-        #
-        # puts "response from data analysis is #{response.body}"
-        #
-        # message = JSON.parse(response.body)['faces']
-        #
-        # puts "message is #{message.size}"
-        #
-        # if message.size > 0
-        #   face_information = message.last
-        #   puts face_information
-        #   height = face_information["height"]
-        #   width = face_information["width"]
-        #   x_pos = face_information["x"]
-        #   y_pos = face_information["y"]
-        #
-        #   temp_file_name = Rails.root.join('tmp','storage', "temp_image_" + @image.id.to_s + ".png")
-        #
-        #   imgData = Base64.decode64(params[:base64img].split('base64,')[1])
-        #
-        #   File.open(temp_file_name, 'wb') do |f|
-        #     f.write(imgData)
-        #   end
-        #
-        #
-        #   temp_im =MiniMagick::Image.open(temp_file_name)
-        #
-        #   face_im = temp_im.crop "#{height.to_s}x#{width.to_s}+#{x_pos}+#{y_pos}"
-        #   temp_face_file_name = Rails.root.join('tmp','storage', "temp_face_image_" + @image.id.to_s + ".png")
-        #   face_im.write temp_face_file_name
-        #
-        #
-        #
-        #   face_im_base64 =  "data:image/png;base64,"+Base64.encode64(File.open(temp_face_file_name, "rb").read)
-        #
-        #   @image.face_image.attach(data: face_im_base64, filename: 'face.png', content_type: 'image/png')
-        #   File.delete(temp_face_file_name) if File.exist?(temp_face_file_name)
-        #
-        # else
-        #   puts "no faces information"
-        # end
-
         format.html { redirect_to @image, notice: 'Image was successfully created.' }
         format.json { render :show, status: :created, location: @image }
       else

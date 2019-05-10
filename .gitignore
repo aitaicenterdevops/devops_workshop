@@ -2,3 +2,5 @@ cmake-build-release
 cmake-build-debug-remote
 cmake-build-debug
 .idea
+facedetection_webapp/storage/*
+facedetection_webapp/tmp/pids/*

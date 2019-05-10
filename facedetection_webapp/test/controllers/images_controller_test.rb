@@ -3,6 +3,9 @@ require 'test_helper'
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @image = images(:one)
+    img = Base64.encode64(File.open(Rails.root.join("test", "fixtures", "files", "neutral-face.png"), "rb").read)
+
+
   end
 
   test "should get index" do
@@ -16,8 +19,12 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create image" do
+
     assert_difference('Image.count') do
-      post images_url, params: { image: { height: @image.height, name: @image.name, width: @image.width, x_position: @image.x_position, y_position: @image.y_position } }
+      img =  "data:image/png;base64," + Base64.encode64(File.open(Rails.root.join("test","fixtures", "files", "neutral-face.png" ), "rb").read)
+
+
+      post images_url, params: { image: { height: @image.height, name: @image.name, width: @image.width, x_position: @image.x_position, y_position: @image.y_position}, base64img: img }
     end
 
     assert_redirected_to image_url(Image.last)
@@ -28,15 +35,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get edit" do
-    get edit_image_url(@image)
-    assert_response :success
-  end
-
-  test "should update image" do
-    patch image_url(@image), params: { image: { height: @image.height, name: @image.name, width: @image.width, x_position: @image.x_position, y_position: @image.y_position } }
-    assert_redirected_to image_url(@image)
-  end
 
   test "should destroy image" do
     assert_difference('Image.count', -1) do
@@ -45,4 +43,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to images_url
   end
+
+
 end
