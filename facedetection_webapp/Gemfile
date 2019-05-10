@@ -39,8 +39,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'mini_magick'
 gem 'active_storage_base64'
 
-gem 'simplecov', require: false, group: :test
-
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -62,6 +60,11 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+  gem 'simplecov', require: false
+  gem 'cucumber-rails', require: false
+  gem 'webmock'
+  gem 'database_cleaner'
+  gem 'rspec'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

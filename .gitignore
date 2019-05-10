@@ -1,6 +1,13 @@
-cmake-build-release
-cmake-build-debug-remote
-cmake-build-debug
+cmake-build-*
 .idea
+facedetection_webapp/storage/*
+facedetection_webapp/tmp/pids/*
+facedetection_webapp/tmp/storage/*
+facedetection_webapp/tmp/cache/*
 *.a
 *.log
+docker_compose_storage/*
+
+!docker_compose_storage/.gitkeep
+facedetection_webapp/tmp/storage
+!facedetection_webapp/tmp/storage/.keep
