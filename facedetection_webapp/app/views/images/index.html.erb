@@ -18,7 +18,13 @@
   <tbody>
     <% @images.each do |image| %>
       <tr>
-        <td><%= image_tag image.face_image %></td>
+
+        <% if image.face_image.attached? %>
+          <td><%= image_tag image.face_image %></td>
+        <% else %>
+          <td><%= image_tag "no_face.png" %></td>
+        <% end %>
+
         <td><%= image.name %></td>
         <td><%= image.width %></td>
         <td><%= image.height %></td>

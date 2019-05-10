@@ -7,13 +7,19 @@
 
 <p>
   <strong>Original image:</strong>
+  <% if @image.original_image.attached? %>
   <%= image_tag(@image.original_image) %>
+  <% else %>
+    <%= image_tag("no_face.png") %>
+  <% end %>
 </p>
 
 <p>
   <strong>Face image:</strong>
   <% if @image.face_image.attached? %>
   <%= image_tag(@image.face_image) %>
+    <% else %>
+  <%= image_tag("no_face.png") %>
     <% end %>
 </p>
 

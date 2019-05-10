@@ -1,7 +1,9 @@
 require 'test_helper'
 
 class ImageTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+
+  test "should not save image without name" do
+  end
+
+
 end

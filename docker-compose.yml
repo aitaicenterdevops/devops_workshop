@@ -1,0 +1,75 @@
+version: '3.5'
+services:
+  web-database:     #Database for face detection webapp
+    container_name: web-database  #Specify container name
+    image: mysql:5.7        #Use image from docker hub
+    restart: always         #Always restart the container when it fails.
+
+    volumes:                    #Specify volume/space on host machine to store data in the database
+      - type: volume            #Type of volume - Volume
+        source: mydata          #Source of volume (specified at the bottom of this file)
+        target: /var/lib/mysql  #Location of data being mounted to source. All data stored at this location in the container are kept on host machine, not in the container.
+
+    environment:                      #Setup mysql environment
+      MYSQL_ROOT_PASSWORD: 'root'     #Set root password
+
+    networks:
+      - devOps-network               #Add the database to docker network named "devOps-network"
+
+
+  webapp:
+    container_name: webapp
+    restart: always
+
+    build:
+      context: .
+      dockerfile: Dockerfile_webapp
+
+    environment:
+      - FACE_DETECTOR_URL=http://172.21.0.24:444/images
+    command: bash -c " rails db:create db:migrate RAILS_ENV=production
+               && rails s -e production"
+              # && tail -f /dev/null"
+    ports:
+      - "3000:3000"          #Expose port 3000 of the container to docker network
+    depends_on:
+      - web-database              #Set this docker container to run after database container is running
+    links:
+      - web-database              #Connect database container to ATS web application container
+    networks:
+      devOps-network:               #Allocate the web container in "devOps-network" docker network
+        ipv4_address: 172.21.0.23    #Request specific IPv4 address in docker network
+
+    volumes:
+      - type: bind
+        source: ./docker_compose_storage
+        target: /home/dev/devops_workshop/facedetection_webapp/storage/
+
+
+  face-detection-analytics:
+    container_name: face-detection-analytics
+    restart: always
+
+    build:
+      context: .
+      dockerfile: Dockerfile_face_analytics
+
+    command: bash -c "/etc/init.d/ssh start && ./facedetector server"
+
+    expose:
+      - "444"
+
+    networks:
+      devOps-network:
+        ipv4_address: 172.21.0.24
+
+networks:
+  devOps-network:                #Setup docker network
+    name: devOps-network         #Name of docker network
+    driver: bridge                #Driver of docker network - bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16   #Specify subnet of docker network
+
+volumes: #add new volume
+  mydata: #new volume name
