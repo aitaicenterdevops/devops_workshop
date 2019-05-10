@@ -38,14 +38,19 @@ pipeline {
     }
 
     stage('test') {
-      /* We don't have a test environment yet so we'll run within
-         Jenkins' environment for now. */
+      /* Really, we should create a minimal Docker environment for
+         testing that doesn't have all of the unnecessary stuff
+         in the dev container. */
       agent {
-        label "${nodeLabel}"
+        dockerfile {
+          label "${nodeLabel}"
+          filename 'Dockerfile.dev'
+          dir 'dev'
+        }
       }
       steps {
         sh '''
-          echo "Hello from the test step!"
+          ./scripts/test.sh
         '''
       }
     }
