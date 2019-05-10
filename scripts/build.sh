@@ -13,7 +13,14 @@ cd cmake-build-release
 if [ -f Makefile ] ; then
   CMAKE_SOURCE_DIR=`cat Makefile | awk '/CMAKE_SOURCE_DIR = /{print $NF}'`
   if [ "${CMAKE_SOURCE_DIR}" != "${PROJECT_DIR}/facedetection_va" ] ; then
-    rm -f CMakeCache.txt Makefile
+    rm -rf CMakeCache.txt Makefile test
+  fi
+fi
+
+if [ -f CMakeCache.txt ] ; then
+  CMAKE_BUILD_DIR=`cat CMakeCache.txt | awk '/# For build in directory: /{print $NF}'`
+  if [ "${CMAKE_BUILD_DIR}" != "${PROJECT_DIR}/facedetection_va/cmake-build-release" ] ; then
+    rm -f CMakeCache.txt Makefile test
   fi
 fi
 
