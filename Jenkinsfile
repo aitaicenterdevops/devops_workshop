@@ -48,6 +48,7 @@ pipeline {
           label "${nodeLabel}"
           filename 'Dockerfile.dev'
           dir 'dev'
+          args '-u root'
         }
       }
       steps {
