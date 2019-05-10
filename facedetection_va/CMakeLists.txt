@@ -23,3 +23,5 @@ target_link_libraries (facedetector ${OpenCV_LIBS} mysqlcppconn webcc Boost::fil
 
 add_subdirectory(webcc)
 
+add_subdirectory(test)
+
