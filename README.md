@@ -301,3 +301,20 @@ see our setup.
 Now that we have a basic build stage in place, let's get the test
 stage doing something useful for us.
 
+Try the following to switch to the
+<tt>03-test</tt> branch of the repository and run
+tests:
+
+    host$ git checkout 03-test
+    host$ docker ps
+    host$ # find the CONTAINER ID for the dev environment. Suppose it's containerId.
+    host$ docker run -it containerId bash
+    cont# cd /home/dev/devops_workshop
+    cont# ./scripts/test.sh
+
+Does it work? Hope so!  It should run test suites for the Web application
+and the face detector service and record code coverage reports for both
+sets of tests.
+
+Now our task is to execute the tests in our CI/CD pipeline.
+

@@ -4,8 +4,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @image = images(:one)
     img = Base64.encode64(File.open(Rails.root.join("test", "fixtures", "files", "neutral-face.png"), "rb").read)
-
-
   end
 
   test "should get index" do
