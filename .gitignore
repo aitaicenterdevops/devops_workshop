@@ -5,6 +5,7 @@ cmake-build-debug
 facedetection_webapp/storage/*
 facedetection_webapp/tmp/pids/*
 *.a
+*.log
 docker_compose_storage/*
 
 !docker_compose_storage/.gitkeep
