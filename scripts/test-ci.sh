@@ -29,7 +29,7 @@ genhtml code-coverage.info --branch-coverage --output-directory ./code-coverage-
 
 ${PROJECT_DIR}/scripts/build.sh
 cd ${PROJECT_DIR}/facedetection_va/cmake-build-release/
-./facedetector server &
+#./facedetector server &
 
 cd $PROJECT_DIR/facedetection_webapp
 service mysql start
@@ -37,5 +37,5 @@ export FACE_DETECTOR_URL="http://localhost:4444/images"
 gem install bundler && gem install rails && bundle install
 rails db:create db:migrate RAILS_ENV=development
 rake test
-kill %1
+#kill %1
 
