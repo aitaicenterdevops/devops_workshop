@@ -64,7 +64,7 @@ pipeline {
         //  reportFiles: 'index.html',
         //  reportName: 'LCov Report'
        // ]
-       // cobertura coberturaReportFile: 'facedetection_va/cmake-build-release/coverage.xml'
+        cobertura coberturaReportFile: 'facedetection_va/cmake-build-release/coverage.xml'
       }
     }
 
