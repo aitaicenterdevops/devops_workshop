@@ -317,4 +317,7 @@ and the face detector service and record code coverage reports for both
 sets of tests.
 
 Now our task is to execute the tests in our CI/CD pipeline.
+Start your Jenkins container, go to the Plugin manager, install the
+Cobertura plugin, and then do a build in the <tt>03-build</tt> branch.
+
 
