@@ -55,6 +55,16 @@ pipeline {
         sh '''
           ./scripts/test-ci.sh
         '''
+        // publish reports
+        publishHTML target: [
+          allowMissing: false,
+          alwaysLinkToLastBuild: false,
+          keepAll: true,
+          reportDir: 'facedetection_va/cmake-build-release/code-coverage-report',
+          reportFiles: 'index.html',
+          reportName: 'LCov Report'
+        ]
+        cobertura coberturaReportFile: 'facedetection_va/cmake-build-release/coverage.xml'
       }
     }
 
