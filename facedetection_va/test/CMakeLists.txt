@@ -10,7 +10,7 @@ add_executable(fd_unittest ${SRC_DIR}/FaceDetectionService.cpp
 
 set_target_properties(
   fd_unittest PROPERTIES COMPILE_FLAGS
-  "-g -O0 -fprofile-arcs -ftest-coverage --coverage -Wall -Wshadow -fexceptions -DGTEST_HAS_PTHREAD=1 -fexceptions"
+  "-g -O0 -fprofile-arcs -ftest-coverage --coverage -Wall -Wshadow -fexceptions -DGTEST_HAS_PTHREAD=1 -fexceptions -fno-inline"
 )
 
 set_target_properties(fd_unittest PROPERTIES LINK_FLAGS "--coverage")

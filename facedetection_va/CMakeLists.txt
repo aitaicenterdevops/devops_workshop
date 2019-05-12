@@ -8,7 +8,7 @@ set(CMAKE_CXX_COMPILER g++)
 find_package(OpenCV 3.4.3 REQUIRED)
 find_package(Boost 1.70 REQUIRED COMPONENTS filesystem thread)
 
-add_executable(facedetector ${CMAKE_CURRENT_SOURCE_DIR}/facedetector.cpp
+add_executable(${CMAKE_CURRENT_SOURCE_DIR}/facedetector.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/FaceDetectionService.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/DB.cpp
                             ${CMAKE_CURRENT_SOURCE_DIR}/json/jsoncpp.cpp

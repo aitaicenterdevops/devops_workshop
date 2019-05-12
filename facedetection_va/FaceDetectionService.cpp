@@ -12,6 +12,15 @@
 
 #include "FaceDetectionService.h"
 
+FaceDetectionService::FaceDetectionService(int iSleepSeconds, CascadeClassifier &cascade)
+        : _iSleepSeconds_(iSleepSeconds), _cascade(cascade)
+{
+    if (_cascade.empty())
+    {
+        LOG_ERRO("Cascade is empty!");
+    }
+}
+
 
 static void Sleep(int seconds) {
     if (seconds > 0) {
@@ -29,7 +38,7 @@ Json::Value StringToJson(const string &s)
     std::stringstream stream(s);
     std::string errs;
     if (!Json::parseFromStream(builder, stream, &json, &errs)) {
-        std::cerr << errs << std::endl;
+        LOG_ERRO(errs.c_str());
     }
     return json;
 }
@@ -38,6 +47,10 @@ Json::Value StringToJson(const string &s)
 void Image::setImageData(string sImageDataBase64)
 {
     string sImageData = base64_decode(sImageDataBase64);
+    if (sImageData == "")
+    {
+        return;
+    }
     vector<uint8_t> vImageData(sImageData.begin(), sImageData.end());
     _matInput = imdecode(vImageData, IMREAD_GRAYSCALE);
 }
@@ -45,6 +58,10 @@ void Image::setImageData(string sImageDataBase64)
 
 Image *JsonToImage(const Json::Value &json)
 {
+    if (json["faceId"].empty() || json["imageData"].empty())
+    {
+        return nullptr;
+    }
     Image *pImage = new Image(json["faceId"].asString());
     if (!json["imageData"].isNull())
     {
@@ -57,12 +74,19 @@ Image *JsonToImage(const Json::Value &json)
 bool JsonStringToImage(const std::string &sJson, Image *&pImage)
 {
     Json::Value json = StringToJson(sJson);
-    if (!json)
+    if (json.empty())
     {
         return false;
     }
     pImage = JsonToImage(json);
-    return true;
+    if (pImage == nullptr)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 
@@ -73,58 +97,79 @@ string JsonToString(const Json::Value &json)
 }
 
 
-void Image::faceDetect(CascadeClassifier &cascade, vector<Rect> &vFaces)
+bool Image::faceDetect(CascadeClassifier &cascade, vector<Rect> &vFaces)
 {
     if (_matInput.empty())
     {
-        LOG_ERRO("Input image is empty!");
-        return;
+        return false;
     }
     equalizeHist(_matInput, _matInput);
     cascade.detectMultiScale(_matInput, vFaces, 1.1, 2, CV_HAAR_SCALE_IMAGE, Size(30, 30));
+    return true;
 }
 
 
 void FaceDetectionService::Post(const string &sRequestContent,
                                 webcc::RestResponse* response)
 {
+    Sleep(_iSleepSeconds_);
+    if (_cascade.empty())
+    {
+        // Cascade not created/initialized
+        LOG_ERRO("Face detection cascade is invalid.");
+        response->status = webcc::Status::kInternalServerError;
+        return;
+    }
+
+    response->status = webcc::Status::kBadRequest;
+
     if (sRequestContent == "")
     {
+        // Empty POST data
         LOG_ERRO("Got empty request.");
         return;
     }
-    Sleep(_iSleepSeconds_);
+
     Image *pImage = nullptr;
-    if (JsonStringToImage(sRequestContent, pImage))
+    if (!JsonStringToImage(sRequestContent, pImage))
     {
-        Json::Value json;
-
-        json["faceId"] = pImage->getFaceId();
-        json["faces"] = Json::Value(Json::arrayValue);
-
-        vector<Rect> vFaces;
-        pImage->faceDetect(_cascade, vFaces);
-
-        for (int i=0; i < (int)vFaces.size(); i++)
-        {
-            Json::Value jsonFace;
-            jsonFace["width"] = vFaces[i].width;
-            jsonFace["height"] = vFaces[i].height;
-            jsonFace["x"] = vFaces[i].x;
-            jsonFace["y"] = vFaces[i].y;
-            json["faces"].append(jsonFace);
-        }
-
-        response->content = JsonToString(json);
-        response->media_type = webcc::media_types::kApplicationJson;
-        response->charset = "utf-8";
-        response->status = webcc::Status::kCreated;
-
-        delete pImage;
-    } else {
         // Invalid JSON
-        response->status = webcc::Status::kBadRequest;
+        LOG_ERRO("Could not extract image from POST data.");
+        if (pImage) delete pImage;
+        return;
     }
+
+    // Create JSON response
+
+    Json::Value json;
+    json["faceId"] = pImage->getFaceId();
+    json["faces"] = Json::Value(Json::arrayValue);
+
+    vector<Rect> vFaces;
+    if (!pImage->faceDetect(_cascade, vFaces))
+    {
+        // Invalid image data
+        LOG_ERRO("Image data invalid.");
+        delete pImage;
+        return;
+    }
+
+    for (int i=0; i < (int)vFaces.size(); i++)
+    {
+        Json::Value jsonFace;
+        jsonFace["width"] = vFaces[i].width;
+        jsonFace["height"] = vFaces[i].height;
+        jsonFace["x"] = vFaces[i].x;
+        jsonFace["y"] = vFaces[i].y;
+        json["faces"].append(jsonFace);
+    }
+
+    response->content = JsonToString(json);
+    response->media_type = webcc::media_types::kApplicationJson;
+    response->charset = "utf-8";
+    response->status = webcc::Status::kCreated;
+
+    delete pImage;
 }
 
 

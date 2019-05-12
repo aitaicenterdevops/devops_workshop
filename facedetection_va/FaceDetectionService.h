@@ -15,14 +15,12 @@ using namespace cv;
 
 class FaceDetectionService : public webcc::RestListService {
 public:
-    explicit FaceDetectionService(int iSleepSeconds, CascadeClassifier &cascade)
-            : _iSleepSeconds_(iSleepSeconds), _cascade(cascade) { }
+    FaceDetectionService(int iSleepSeconds, CascadeClassifier &cascade);
 protected:
     void Get(const webcc::UrlQuery& query, webcc::RestResponse* response) override;
     void Post(const std::string& request_content, webcc::RestResponse* response) override;
 private:
-    // Sleep some seconds before sending back the response.
-    // For testing timeout control in client side.
+    // Sleep some seconds before sending back the response for testing timeout control on client side.
     int _iSleepSeconds_;
     CascadeClassifier _cascade;
 };
@@ -31,11 +29,11 @@ private:
 class Image
 {
 public:
-    explicit Image() { _faceId = nullptr; }
+    explicit Image() { }
     explicit Image(string faceId) { _faceId = faceId; }
     string getFaceId() { return _faceId; }
     void setImageData(string sImageDataBase64);
-    void faceDetect(CascadeClassifier &cascade, vector<Rect> &vFaces);
+    bool faceDetect(CascadeClassifier &cascade, vector<Rect> &vFaces);
 private:
     string _faceId;
     Mat _matInput;
