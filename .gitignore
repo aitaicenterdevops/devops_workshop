@@ -5,10 +5,11 @@ facedetection_webapp/coverage/*
 facedetection_webapp/tmp/pids/*
 facedetection_webapp/tmp/storage/*
 facedetection_webapp/tmp/cache/*
+facedetection_webapp/public/assets/*
 *.a
 *.log
 docker_compose_storage/*
-
+.ruby-version
 !docker_compose_storage/.gitkeep
 facedetection_webapp/tmp/storage
 !facedetection_webapp/tmp/storage/.keep
