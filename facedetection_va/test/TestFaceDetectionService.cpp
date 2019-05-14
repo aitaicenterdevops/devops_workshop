@@ -88,7 +88,7 @@ TEST(FaceDetectionService, Post)
 
     // Load valid cascade
 
-    cascadeClassifier.load("/home/dev/devops_workshop/facedetection_va/haarcascade_frontalface_alt.xml");
+    cascadeClassifier.load("haarcascade_frontalface_alt.xml");
     ASSERT_FALSE(cascadeClassifier.empty());
     delete pFaceDetectionService;
     pFaceDetectionService = new TestFaceDetectionService(0, cascadeClassifier);

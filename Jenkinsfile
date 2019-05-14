@@ -48,7 +48,7 @@ pipeline {
           label "${nodeLabel}"
           filename 'Dockerfile.dev'
           dir 'dev'
-          args "-u root -v ${workspace}:/home/dev/devops_workshop/"
+          args "-u root"
         }
       }
       steps {
